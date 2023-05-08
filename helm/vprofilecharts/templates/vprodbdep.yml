@@ -16,17 +16,24 @@ spec:
     spec:
       containers:
       - name: vprodb
-        image: imranvisualpath/8pmdbimg:v1
+        image: mathiasejoh/vprofiledb:V1
+        volumeMounts:
+        - mountPath: /data
+          name: vprodb
         ports:
         - name: vprodb-port
           containerPort: 3306
-        env: 
+        env:
          - name: MYSQL_ROOT_PASSWORD
            valueFrom:
              secretKeyRef:
                name: app-secret
                key: db-pass
-#        env:
-#         - name: MYSQL_ROOT_PASSWORD
-#           value: "vprodbpass"
+      nodeSelector:
+        zone: us-west-2b
 
+      volumes:
+      - name: vprodb
+        nfs:
+          server: 172.16.16.103 # IP to our NFS server
+          path: /mnt/nfs_ik8c # The exported directory
