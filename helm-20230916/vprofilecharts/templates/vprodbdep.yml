@@ -17,6 +17,9 @@ spec:
       containers:
       - name: vprodb
         image: mathiasejoh/vprofiledb:V1
+        volumeMounts:
+        - mountPath: /data
+          name: vprodb
         ports:
         - name: vprodb-port
           containerPort: 3306
@@ -29,3 +32,8 @@ spec:
       nodeSelector:
         zone: us-west-2b
 
+      volumes:
+      - name: vprodb
+        nfs:
+          server: 172.16.16.103 # IP to our NFS server
+          path: /mnt/nfs_ik8c # The exported directory
